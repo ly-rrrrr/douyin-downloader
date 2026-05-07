@@ -1,0 +1,30 @@
+pipeline_id: m1_ingest_transcript
+version: 0.1.0
+stages:
+  - id: ingest
+    agent: B1_Douyin_Acquisition
+    input:
+      config: toolflow/templates/ingest_job.example.yaml
+    output:
+      manifest: artifacts/manifests/artifact_manifest.json
+    quality_gate:
+      completeness_gte: 0.98
+
+  - id: preprocess
+    agent: B2_Media_Normalization
+    depends_on: [ingest]
+    input:
+      manifest_ref: artifacts/manifests/artifact_manifest.json
+    output:
+      segments: artifacts/processed/segments/index.json
+      audio: artifacts/processed/audio_clean/
+
+  - id: transcript
+    agent: B3_ASR
+    depends_on: [preprocess]
+    input:
+      audio_ref: artifacts/processed/audio_clean/
+    output:
+      transcript_index: artifacts/analysis/transcript/index.json
+    quality_gate:
+      median_drift_ms_lte: 500

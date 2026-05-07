@@ -1,0 +1,22 @@
+job_id: jc_master_2026_0001
+seed_urls:
+  - "https://www.douyin.com/user/xxxx"
+mode: "user"
+time_range:
+  start: "2024-01-01"
+  end: "2026-12-31"
+output_root: "./artifacts/raw"
+download:
+  concurrency: 3
+  rate_limit_per_sec: 2
+  max_retries: 5
+  timeout_sec: 60
+  include:
+    video: true
+    cover: true
+    metadata: true
+naming:
+  pattern: "{publish_date}_{author}_{aweme_id}"
+resume:
+  enabled: true
+  state_file: "./artifacts/state/ingest_state.json"

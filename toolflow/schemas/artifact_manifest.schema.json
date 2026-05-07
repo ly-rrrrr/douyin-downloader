@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/artifact_manifest.schema.json",
+  "title": "ArtifactManifest",
+  "type": "object",
+  "required": ["job_id", "generated_at", "artifacts"],
+  "properties": {
+    "job_id": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "success": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "retried": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "source_url",
+          "aweme_id",
+          "local_path",
+          "sha256",
+          "status",
+          "created_at"
+        ],
+        "properties": {
+          "artifact_id": {"type": "string"},
+          "source_url": {"type": "string", "format": "uri"},
+          "aweme_id": {"type": "string"},
+          "author": {"type": "string"},
+          "title": {"type": "string"},
+          "publish_time": {"type": "string", "format": "date-time"},
+          "local_path": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+          "duration_sec": {"type": "number", "minimum": 0},
+          "file_size": {"type": "integer", "minimum": 0},
+          "status": {"type": "string", "enum": ["success", "failed", "retried", "skipped"]},
+          "error": {"type": "string"},
+          "created_at": {"type": "string", "format": "date-time"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
